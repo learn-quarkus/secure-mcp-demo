@@ -1,0 +1,143 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 900">
+  <defs>
+    <style>
+      .component { fill: #ffffff; stroke: #333; stroke-width: 2; }
+      .client { fill: #fff4e1; }
+      .mcp { fill: #ffe1f5; }
+      .rest { fill: #e1ffe1; }
+      .keycloak { fill: #ffe1e1; }
+      .openai { fill: #f0e1ff; }
+      .user { fill: #e1f5ff; }
+      .text { font-family: Arial, sans-serif; font-size: 14px; fill: #333; }
+      .title { font-weight: bold; font-size: 18px; }
+      .subtitle { font-size: 13px; fill: #555; }
+      .port { font-size: 12px; fill: #666; }
+      .arrow { stroke: #0066cc; stroke-width: 2.5; fill: none; marker-end: url(#arrowhead); }
+      .arrow-return { stroke: #009900; stroke-width: 2.5; fill: none; marker-end: url(#arrowhead-green); stroke-dasharray: 5,5; }
+      .step-label { font-size: 12px; fill: #0066cc; font-weight: bold; }
+      .step-desc { font-size: 11px; fill: #0066cc; }
+      .token-label { font-size: 10px; fill: #cc0000; font-style: italic; }
+      .header { font-size: 28px; font-weight: bold; fill: #333; }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#0066cc" />
+    </marker>
+    <marker id="arrowhead-green" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#009900" />
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="700" y="40" class="header" text-anchor="middle">Secure MCP Demo - Architecture Flow</text>
+
+  <!-- User/Browser -->
+  <rect x="600" y="80" width="200" height="70" rx="10" class="component user"/>
+  <text x="700" y="110" class="title" text-anchor="middle">🌐 Browser</text>
+  <text x="700" y="130" class="subtitle" text-anchor="middle">GET /poem</text>
+
+  <!-- Client -->
+  <rect x="100" y="250" width="240" height="110" rx="10" class="component client"/>
+  <text x="220" y="280" class="title" text-anchor="middle">📱 MCP Client</text>
+  <text x="220" y="300" class="subtitle" text-anchor="middle">Quarkus + LangChain4j</text>
+  <text x="220" y="320" class="port" text-anchor="middle">Port: 8085</text>
+  <text x="220" y="335" class="port" text-anchor="middle">Client: quarkus-mcp-client</text>
+
+  <!-- OpenAI -->
+  <rect x="100" y="420" width="240" height="80" rx="10" class="component openai"/>
+  <text x="220" y="450" class="title" text-anchor="middle">🤖 OpenAI</text>
+  <text x="220" y="470" class="subtitle" text-anchor="middle">GPT-4 Model</text>
+  <text x="220" y="485" class="port" text-anchor="middle">Poem Generation</text>
+
+  <!-- MCP Server -->
+  <rect x="550" y="250" width="240" height="110" rx="10" class="component mcp"/>
+  <text x="670" y="280" class="title" text-anchor="middle">🔧 MCP Server</text>
+  <text x="670" y="300" class="subtitle" text-anchor="middle">Tool Provider</text>
+  <text x="670" y="320" class="port" text-anchor="middle">Port: 8080</text>
+  <text x="670" y="335" class="port" text-anchor="middle">Client: quarkus-mcp-server</text>
+
+  <!-- REST API -->
+  <rect x="1000" y="250" width="240" height="110" rx="10" class="component rest"/>
+  <text x="1120" y="280" class="title" text-anchor="middle">🔒 REST API</text>
+  <text x="1120" y="300" class="subtitle" text-anchor="middle">Service Account</text>
+  <text x="1120" y="320" class="port" text-anchor="middle">Port: 8087</text>
+  <text x="1120" y="335" class="port" text-anchor="middle">GET /service-account-name</text>
+
+  <!-- Keycloak -->
+  <rect x="550" y="550" width="340" height="120" rx="10" class="component keycloak"/>
+  <text x="720" y="585" class="title" text-anchor="middle">🔐 Keycloak</text>
+  <text x="720" y="605" class="subtitle" text-anchor="middle">OIDC Provider - Realm: quarkus</text>
+  <text x="720" y="625" class="port" text-anchor="middle">Port: 9080</text>
+  <text x="720" y="645" class="port" text-anchor="middle">Token Exchange &amp; Audience Validation</text>
+
+  <!-- Flow Arrows and Labels -->
+
+  <!-- Step 1: User to Client -->
+  <path d="M 700 150 L 280 250" class="arrow"/>
+  <text x="460" y="185" class="step-label">① Request</text>
+
+  <!-- Step 2: Client to Keycloak (Get Token) -->
+  <path d="M 220 360 L 550 560" class="arrow"/>
+  <text x="350" y="450" class="step-label">② Get Token</text>
+  <text x="350" y="465" class="token-label">aud: quarkus-mcp-server</text>
+
+  <!-- Step 3: Client to MCP Server -->
+  <path d="M 340 290 L 550 290" class="arrow"/>
+  <text x="400" y="275" class="step-label">③ Call Tool</text>
+  <text x="400" y="288" class="token-label">+ Bearer Token</text>
+
+  <!-- Step 4: MCP to Keycloak (Token Exchange) -->
+  <path d="M 670 360 L 670 550" class="arrow"/>
+  <text x="680" y="455" class="step-label">④ Exchange</text>
+  <text x="680" y="470" class="token-label">aud: quarkus-mcp-service</text>
+
+  <!-- Step 5: MCP to REST -->
+  <path d="M 790 305 L 1000 305" class="arrow"/>
+  <text x="850" y="290" class="step-label">⑤ Call API</text>
+  <text x="850" y="303" class="token-label">+ Exchanged Token</text>
+
+  <!-- Step 6: REST to MCP (Return) -->
+  <path d="M 1000 325 L 790 325" class="arrow-return"/>
+  <text x="850" y="345" class="step-desc" fill="#009900">⑥ Account Name</text>
+
+  <!-- Step 7: MCP to Client (Return) -->
+  <path d="M 550 310 L 340 310" class="arrow-return"/>
+  <text x="400" y="328" class="step-desc" fill="#009900">⑦ Tool Result</text>
+
+  <!-- Step 8: Client to OpenAI -->
+  <path d="M 200 360 L 200 420" class="arrow"/>
+  <text x="150" y="395" class="step-label">⑧ Generate</text>
+
+  <!-- Step 9: OpenAI to Client (Return) -->
+  <path d="M 240 420 L 240 360" class="arrow-return"/>
+  <text x="250" y="395" class="step-desc" fill="#009900">⑨ Poem</text>
+
+  <!-- Step 10: Client to User (Return) -->
+  <path d="M 280 250 L 640 150" class="arrow-return"/>
+  <text x="430" y="215" class="step-desc" fill="#009900">⑩ Response</text>
+
+  <!-- Legend Box -->
+  <rect x="50" y="750" width="1300" height="130" rx="5" fill="#f9f9f9" stroke="#999" stroke-width="2"/>
+  <text x="700" y="780" class="title" text-anchor="middle" font-size="20">Token Flow &amp; Security Model</text>
+
+  <!-- Legend Content - Left Side -->
+  <text x="80" y="810" class="text" font-weight="bold">Token 1 (Client → MCP):</text>
+  <text x="80" y="830" class="subtitle">• Audience: quarkus-mcp-server</text>
+  <text x="80" y="850" class="subtitle">• Issued to: service-account-quarkus-mcp-client</text>
+  <text x="80" y="870" class="subtitle">• Validated by MCP Server</text>
+
+  <!-- Legend Content - Middle -->
+  <text x="480" y="810" class="text" font-weight="bold">Token 2 (MCP → REST):</text>
+  <text x="480" y="830" class="subtitle">• Audience: quarkus-mcp-service</text>
+  <text x="480" y="850" class="subtitle">• Issued to: service-account-quarkus-mcp-server</text>
+  <text x="480" y="870" class="subtitle">• Validated by REST API</text>
+
+  <!-- Legend Content - Right Side -->
+  <text x="880" y="810" class="text" font-weight="bold">Security Features:</text>
+  <text x="880" y="830" class="subtitle">✓ Audience Isolation</text>
+  <text x="880" y="850" class="subtitle">✓ Token Exchange (RFC 8693)</text>
+  <text x="880" y="870" class="subtitle">✓ Zero Trust Architecture</text>
+
+  <text x="1120" y="830" class="subtitle">✓ OIDC Standard</text>
+  <text x="1120" y="850" class="subtitle">✓ No Hardcoded Secrets</text>
+  <text x="1120" y="870" class="subtitle">✓ Least Privilege</text>
+</svg>
